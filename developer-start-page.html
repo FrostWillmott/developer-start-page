@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Dev Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: linear-gradient(135deg, #161b22 0%, #1c2128 100%);
+            border-radius: 16px;
+            border: 1px solid #30363d;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: #58a6ff;
+            text-shadow: 0 2px 8px rgba(88, 166, 255, 0.3);
+            letter-spacing: -0.02em;
+        }
+
+        .time {
+            font-size: 1.1rem;
+            color: #7d8590;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+            font-weight: 500;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .action-btn {
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #21262d 0%, #2d333b 100%);
+            border: 1px solid #373e47;
+            border-radius: 12px;
+            color: #e6edf3;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.1) 0%, rgba(88, 166, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, #30363d 0%, #3c434d 100%);
+            border-color: #58a6ff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(88, 166, 255, 0.3);
+        }
+
+        .action-btn:hover::before {
+            opacity: 1;
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+            transition: transform 0.1s ease;
+        }
+
+        .action-btn .icon {
+            font-size: 18px;
+            min-width: 22px;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+        }
+
+        .sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            background: linear-gradient(135deg, #161b22 0%, #1c2128 100%);
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #58a6ff, #7c3aed, #06b6d4);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: #58a6ff;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(88, 166, 255, 0.2);
+        }
+
+        .section:hover::before {
+            opacity: 1;
+        }
+
+        .section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #f0f6fc;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            border: 1px solid #21262d;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #e6edf3;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(88, 166, 255, 0.08) 0%, rgba(88, 166, 255, 0.03) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .link:hover {
+            background: linear-gradient(135deg, #21262d 0%, #2d333b 100%);
+            border-color: #58a6ff;
+            color: #58a6ff;
+            transform: translateX(4px);
+        }
+
+        .link:hover::before {
+            opacity: 1;
+        }
+
+        .link-icon {
+            margin-right: 12px;
+            font-size: 16px;
+            min-width: 20px;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .terminal-section {
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .terminal-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #7ee787, #58a6ff, #f85149);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            color: #7d8590;
+            font-weight: 600;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .terminal-content {
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .command {
+            color: #7ee787;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .comment {
+            color: #7d8590;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .status-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .status-card {
+            background: linear-gradient(135deg, #161b22 0%, #1c2128 100%);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #58a6ff;
+            margin-bottom: 8px;
+        }
+
+        .status-label {
+            font-size: 12px;
+            color: #7d8590;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1024px) {
+            .sections {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+            }
+            
+            .header {
+                padding: 24px;
+                margin-bottom: 40px;
+            }
+            
+            .header h1 {
+                font-size: 2.4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .sections {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .terminal-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>~/backend-dev</h1>
+            <div class="time" id="current-time"></div>
+        </div>
+
+        <div class="status-bar" style="display: none;">
+        </div>
+
+        <div class="quick-actions">
+            <button class="action-btn" onclick="runDjangoShell()">
+                <span class="icon">🐍</span>
+                <span>Django Shell</span>
+            </button>
+            <button class="action-btn" onclick="k8sCommands()">
+                <span class="icon">⚙️</span>
+                <span>Kubernetes Utils</span>
+            </button>
+            <button class="action-btn" onclick="algorithmsTracker()">
+                <span class="icon">🧠</span>
+                <span>Algorithms Progress</span>
+            </button>
+            <button class="action-btn" onclick="gcpCommands()">
+                <span class="icon">☁️</span>
+                <span>GCP Commands</span>
+            </button>
+            <button class="action-btn" onclick="checkPorts()">
+                <span class="icon">🔍</span>
+                <span>Check Ports</span>
+            </button>
+            <button class="action-btn" onclick="regexTester()">
+                <span class="icon">🔤</span>
+                <span>Regex Testing</span>
+            </button>
+        </div>
+
+        <div class="sections">
+            <div class="section">
+                <h2>🧠 Problem Solving</h2>
+                <div class="links">
+                    <a href="https://leetcode.com" class="link">
+                        <span class="link-icon">🔢</span>
+                        LeetCode
+                    </a>
+                    <a href="https://algo.monster" class="link">
+                        <span class="link-icon">👾</span>
+                        AlgoMonster
+                    </a>
+                    <a href="https://claude.ai" class="link">
+                        <span class="link-icon">🤖</span>
+                        Claude AI
+                    </a>
+                    <a href="https://docs.anthropic.com" class="link">
+                        <span class="link-icon">📖</span>
+                        Claude API Docs
+                    </a>
+                    <a href="https://github.com/FrostWillmott?tab=repositories" class="link">
+                        <span class="link-icon">📁</span>
+                        My Algorithms
+                    </a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔧 Development</h2>
+                <div class="links">
+                    <a href="https://github.com/FrostWillmott" class="link">
+                        <span class="link-icon">🐙</span>
+                        GitHub Profile
+                    </a>
+                    <a href="https://github.com" class="link">
+                        <span class="link-icon">📦</span>
+                        GitHub
+                    </a>
+                    <a href="https://pypi.org" class="link">
+                        <span class="link-icon">🐍</span>
+                        PyPI
+                    </a>
+                    <a href="https://python-poetry.org/docs/" class="link">
+                        <span class="link-icon">📜</span>
+                        Poetry Docs
+                    </a>
+                    <a href="https://stackoverflow.com" class="link">
+                        <span class="link-icon">📚</span>
+                        Stack Overflow
+                    </a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🧪 Testing</h2>
+                <div class="links">
+                    <a href="https://docs.pytest.org" class="link">
+                        <span class="link-icon">🔬</span>
+                        pytest Docs
+                    </a>
+                    <a href="https://realpython.com/python-testing/" class="link">
+                        <span class="link-icon">📖</span>
+                        Python Testing 101
+                    </a>
+                    <a href="https://fastapi.tiangolo.com/tutorial/testing/" class="link">
+                        <span class="link-icon">⚡</span>
+                        FastAPI Testing
+                    </a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🐛 Debugging</h2>
+                <div class="links">
+                    <a href="https://www.jetbrains.com/help/pycharm/debugging-code.html" class="link">
+                        <span class="link-icon">🔍</span>
+                        PyCharm Debugging
+                    </a>
+                    <a href="https://www.pragmaticlinux.com/2020/09/setup-and-debug-a-django-app-in-pycharm-community-edition/" class="link">
+                        <span class="link-icon">🐍</span>
+                        Django + PyCharm
+                    </a>
+                    <a href="https://testdriven.io/blog/django-debugging-pycharm/" class="link">
+                        <span class="link-icon">🐳</span>
+                        Django Docker Debug
+                    </a>
+                    <a href="https://medium.com/@mzhaaf/how-to-run-and-debug-fastapi-with-uvicorn-in-pycharm-2b83ff883f18" class="link">
+                        <span class="link-icon">⚡</span>
+                        FastAPI + PyCharm
+                    </a>
+                    <a href="https://www.codementor.io/@laleetavaiya/debug-flask-app-in-docker-with-pycharm-1m1qcguubj" class="link">
+                        <span class="link-icon">🐳</span>
+                        FastAPI Docker Debug
+                    </a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🗄️ Database & Tools</h2>
+                <div class="links">
+                    <a href="https://www.postgresql.org/docs/" class="link">
+                        <span class="link-icon">🐘</span>
+                        PostgreSQL Docs
+                    </a>
+                    <a href="https://redis.io/documentation" class="link">
+                        <span class="link-icon">🔴</span>
+                        Redis Docs
+                    </a>
+                    <a href="https://docs.docker.com" class="link">
+                        <span class="link-icon">🐳</span>
+                        Docker Docs
+                    </a>
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP" class="link">
+                        <span class="link-icon">🌐</span>
+                        HTTP Reference
+                    </a>
+                    <a href="https://httpstatuses.com" class="link">
+                        <span class="link-icon">📊</span>
+                        HTTP Status Codes
+                    </a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🛠️ Practical Tools</h2>
+                <div class="links">
+                    <a href="https://regex101.com" class="link">
+                        <span class="link-icon">🔤</span>
+                        Regex101
+                    </a>
+                    <a href="https://www.json.org" class="link">
+                        <span class="link-icon">📋</span>
+                        JSON.org
+                    </a>
+                    <a href="https://jsonlint.com" class="link">
+                        <span class="link-icon">✅</span>
+                        JSONLint
+                    </a>
+                    <a href="https://httpie.io/docs" class="link">
+                        <span class="link-icon">🚀</span>
+                        HTTPie Docs
+                    </a>
+                    <a href="https://jwt.io" class="link">
+                        <span class="link-icon">🔐</span>
+                        JWT.io
+                    </a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎨 Frontend Tools</h2>
+                <div class="links">
+                    <a href="https://figma.com" class="link">
+                        <span class="link-icon">🎨</span>
+                        Figma
+                    </a>
+                    <a href="https://fonts.google.com" class="link">
+                        <span class="link-icon">🔤</span>
+                        Google Fonts
+                    </a>
+                    <a href="https://coolors.co" class="link">
+                        <span class="link-icon">🌈</span>
+                        Coolors
+                    </a>
+                    <a href="https://tailwindcss.com/docs" class="link">
+                        <span class="link-icon">🎭</span>
+                        Tailwind CSS
+                    </a>
+                    <a href="https://getbootstrap.com/docs" class="link">
+                        <span class="link-icon">📱</span>
+                        Bootstrap
+                    </a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>☁️ Cloud & K8s</h2>
+                <div class="links">
+                    <a href="https://kubernetes.io/docs/" class="link">
+                        <span class="link-icon">⚙️</span>
+                        Kubernetes Docs
+                    </a>
+                    <a href="https://www.cncf.io/certification/cka/" class="link">
+                        <span class="link-icon">🎓</span>
+                        Kubernetes Certification
+                    </a>
+                    <a href="https://cloud.google.com/docs" class="link">
+                        <span class="link-icon">☁️</span>
+                        Google Cloud Docs
+                    </a>
+                    <a href="https://cloud.google.com/certification" class="link">
+                        <span class="link-icon">🏆</span>
+                        GCP Certification
+                    </a>
+                    <a href="https://helm.sh/docs/" class="link">
+                        <span class="link-icon">⛵</span>
+                        Helm Charts
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="terminal-section">
+            <div class="terminal-header">
+                <span>💻</span>
+                <span>Quick Commands</span>
+            </div>
+            <div class="terminal-content" id="terminal-output">
+                <div class="comment"># Django Development Commands</div>
+                <div class="command">python manage.py runserver</div>
+                <div class="command">python manage.py shell</div>
+                <div class="command">python manage.py migrate</div>
+                <br>
+                <div class="comment"># macOS Port Checking</div>
+                <div class="command">lsof -i :8000</div>
+                <div class="command">ps aux | grep postgres</div>
+                <br>
+                <div class="comment"># Kubernetes Commands</div>
+                <div class="command">kubectl get pods</div>
+                <div class="command">kubectl get services</div>
+                <div class="command">kubectl logs -f pod-name</div>
+                <br>
+                <div class="comment"># GCP Commands</div>
+                <div class="command">gcloud config list</div>
+                <div class="command">gcloud compute instances list</div>
+                <div class="command">gcloud container clusters get-credentials cluster-name</div>
+                <br>
+                <div class="comment"># Poetry Commands</div>
+                <div class="command">poetry install</div>
+                <div class="command">poetry add package-name</div>
+                <div class="command">poetry shell</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const moscowTime = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Moscow"}));
+            const timeString = moscowTime.toLocaleTimeString('en-US', { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const dateString = moscowTime.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            document.getElementById('current-time').textContent = `${timeString} • ${dateString}`;
+        }
+
+        function runDjangoShell() {
+            const commands = `Django Shell Commands:
+
+🚀 Start Django Shell:
+   python manage.py shell                 # In activated venv
+   
+🔧 PyCharm Integration:
+   # PyCharm -> Tools -> Run manage.py Task -> shell
+   # Or use PyCharm's Django Console directly
+
+🔍 Common Shell Operations:
+   from django.contrib.auth.models import User
+   User.objects.all()
+   User.objects.create_user('username', 'email@example.com', 'password')
+
+📊 Database Queries:
+   from myapp.models import MyModel
+   MyModel.objects.filter(field='value')
+   MyModel.objects.create(field='value')
+
+🧹 Exit:
+   exit()  # or Ctrl+D in terminal
+   # In PyCharm: just close the console tab`;
+            
+            navigator.clipboard.writeText('python manage.py shell').then(() => {
+                updateTerminal(commands + '\n\n✅ "python manage.py shell" copied to clipboard!');
+            }).catch(() => {
+                updateTerminal(commands);
+            });
+        }
+
+        function checkPorts() {
+            const commands = `Port Management Commands (macOS/zsh):
+
+🔍 Check all active ports:
+   lsof -i -P -n | grep LISTEN
+   netstat -an | grep LISTEN
+
+🎯 Check specific port (e.g., 8000):
+   lsof -i :8000
+   lsof -i tcp:8000
+
+⚡ Kill process by port:
+   kill -9 $(lsof -ti:8000)
+   pkill -f "python.*8000"
+
+🔍 Check Django/common dev ports:
+   lsof -i :8000,8080,5000,3000
+
+🗄️ Check PostgreSQL (since it auto-starts):
+   lsof -i :5432
+   brew services list | grep postgresql
+
+🐳 Check Docker ports:
+   docker ps --format "table {{.Names}}\\t{{.Ports}}"
+
+💡 macOS specific:
+   sudo lsof -i -P -n | grep LISTEN  # More detailed info`;
+            
+            navigator.clipboard.writeText('lsof -i :8000').then(() => {
+                updateTerminal(commands + '\n\n✅ "lsof -i :8000" copied to clipboard!');
+            }).catch(() => {
+                updateTerminal(commands);
+            });
+        }
+
+        function regexTester() {
+            const commands = `Regex Testing & Common Patterns:
+
+🔤 Essential Regex101 Workflow:
+   1. Open regex101.com
+   2. Select Python flavor (for Django)
+   3. Paste your test strings
+   4. Build regex incrementally
+   5. Check explanation panel
+
+📧 Common Patterns:
+   Email: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$
+   Phone: ^\\+?1?\\d{9,15}$
+   URL: ^https?:\\/\\/[^\\s/$.?#].[^\\s]*$
+   UUID: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+
+🐍 Django Regex:
+   # urls.py path patterns
+   path('users/<int:user_id>/', view)
+   path('posts/<slug:slug>/', view)
+   path('api/v1/<str:endpoint>/', view)
+
+🔧 Python re module:
+   import re
+   re.match(pattern, string)
+   re.search(pattern, string)
+   re.findall(pattern, string)
+   re.sub(pattern, replacement, string)
+
+💡 Regex101 Features:
+   • Real-time testing
+   • Explanation panel
+   • Code generator for different languages
+   • Save & share patterns`;
+            
+            navigator.clipboard.writeText('import re').then(() => {
+                updateTerminal(commands + '\n\n✅ "import re" copied to clipboard!');
+            }).catch(() => {
+                updateTerminal(commands);
+            });
+        }
+
+        function k8sCommands() {
+            const commands = `Kubernetes Commands:
+
+⚙️ Cluster & Nodes:
+   kubectl cluster-info
+   kubectl get nodes
+   kubectl describe node node-name
+
+🚀 Pods Management:
+   kubectl get pods --all-namespaces
+   kubectl get pods -o wide
+   kubectl describe pod pod-name
+   kubectl logs -f pod-name
+   kubectl exec -it pod-name -- /bin/bash
+
+📦 Deployments:
+   kubectl get deployments
+   kubectl scale deployment myapp --replicas=3
+   kubectl rollout status deployment/myapp
+   kubectl rollout undo deployment/myapp
+
+🌐 Services & Networking:
+   kubectl get services
+   kubectl get ingress
+   kubectl port-forward pod-name 8080:80
+
+🔧 Configuration:
+   kubectl get configmaps
+   kubectl get secrets
+   kubectl create secret generic mysecret --from-literal=key=value
+
+📋 Debugging:
+   kubectl top nodes
+   kubectl top pods
+   kubectl get events --sort-by=.metadata.creationTimestamp`;
+            
+            navigator.clipboard.writeText('kubectl get pods').then(() => {
+                updateTerminal(commands + '\n\n✅ "kubectl get pods" copied to clipboard!');
+            }).catch(() => {
+                updateTerminal(commands);
+            });
+        }
+
+        function algorithmsTracker() {
+            const progress = `Algorithm Practice Progress:
+
+🎯 Flexible Learning Approach:
+   • Use LeetCode's built-in progress tracking
+   • AlgoMonster paid subscription for patterns
+   • Claude AI for detailed explanations when stuck
+
+📊 Current Focus Areas:
+   ✅ Arrays & Strings
+   🔄 Two Pointers & Sliding Window  
+   📝 Hash Tables & Sets
+   🌳 Trees & Graphs
+   📚 Dynamic Programming (upcoming)
+
+💡 Problem-Solving Strategy:
+   1. Read problem carefully (understand examples)
+   2. Think through brute force approach
+   3. Identify patterns from AlgoMonster
+   4. Optimize using known patterns
+   5. Code and test with examples
+   6. Ask Claude for explanation if stuck
+
+🔗 Quick Access:
+   • LeetCode: Check daily challenge + recent submissions
+   • AlgoMonster: Review pattern you're currently studying
+   • Claude: Paste problem for step-by-step breakdown
+
+📈 No rigid schedule - just consistent practice when possible`;
+            
+            updateTerminal(progress);
+        }
+
+        function gcpCommands() {
+            const commands = `Google Cloud Platform - Future Learning Plan:
+
+📚 Study Resources (when ready):
+   • Official GCP Documentation
+   • Qwiklabs hands-on labs
+   • Google Cloud Skills Boost
+   • YouTube: Google Cloud Tech channel
+
+🎓 Certification Path Options:
+   • Cloud Digital Leader (foundational)
+   • Associate Cloud Engineer (technical)
+   • Professional Cloud Architect (advanced)
+
+🛠️ Key Areas to Focus On:
+   • Compute Engine & App Engine
+   • Google Kubernetes Engine (GKE)
+   • Cloud Storage & Cloud SQL
+   • IAM & Security
+   • Networking fundamentals
+
+💡 Learning Strategy:
+   1. Start with free tier experimentation
+   2. Complete Qwiklabs for hands-on practice
+   3. Build sample projects (deploy Django app)
+   4. Take practice exams
+   5. Schedule certification when confident
+
+🔗 Preparation Commands (for later):
+   gcloud config list
+   gcloud auth login
+   gcloud projects list
+   gcloud compute instances list
+
+📝 Current Status: Planning phase - focus on K8s + algorithms first`;
+            
+            updateTerminal(commands);
+        }
+
+        function updateTerminal(content) {
+            document.getElementById('terminal-output').innerHTML = `<div style="white-space: pre-line; color: #7ee787;">${content}</div>`;
+        }
+
+        // Initialize
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>
