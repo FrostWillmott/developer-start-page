@@ -8,7 +8,7 @@ A customizable start page for backend developers with quick links, command refer
 
 - 🔗 Quick access to development tools and documentation
 - 💻 Command reference terminal for Django, Kubernetes, GCP, Poetry
-- 📊 Algorithm practice tracking
+- 📊 Algorithm learning plan
 - 🔍 Port checking and debugging utilities
 - 🌙 Dark theme optimized for developers
 - ⚡ Lightweight and fast - no dependencies required
