@@ -58,6 +58,34 @@
             margin-bottom: 40px;
         }
 
+        .sections-toolbar {
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: #58a6ff;
+            box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.2);
+        }
+
+        .search-empty {
+            color: #7d8590;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
         .action-btn {
             padding: 16px 24px;
             background: linear-gradient(135deg, #21262d 0%, #2d333b 100%);
@@ -266,37 +294,6 @@
             font-style: italic;
         }
 
-        .status-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .status-card {
-            background: linear-gradient(135deg, #161b22 0%, #1c2128 100%);
-            border: 1px solid #30363d;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        .status-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #58a6ff;
-            margin-bottom: 8px;
-        }
-
-        .status-label {
-            font-size: 12px;
-            color: #7d8590;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            font-weight: 600;
-        }
-
         @media (max-width: 1024px) {
             .sections {
                 grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -349,59 +346,67 @@
             <div class="time" id="current-time"></div>
         </div>
 
-        <div class="status-bar" style="display: none;">
-        </div>
-
         <div class="quick-actions">
-            <button class="action-btn" onclick="runDjangoShell()">
+            <button class="action-btn" id="btn-django-shell">
                 <span class="icon">🐍</span>
                 <span>Django Shell</span>
             </button>
-            <button class="action-btn" onclick="k8sCommands()">
+            <button class="action-btn" id="btn-k8s">
                 <span class="icon">⚙️</span>
                 <span>Kubernetes Utils</span>
             </button>
-            <button class="action-btn" onclick="algorithmsTracker()">
+            <button class="action-btn" id="btn-algorithms">
                 <span class="icon">🧠</span>
-                <span>Algorithms Learning Plan</span>
+                <span>RAG Workflow</span>
             </button>
-            <button class="action-btn" onclick="gcpCommands()">
+            <button class="action-btn" id="btn-gcp">
                 <span class="icon">☁️</span>
-                <span>GCP Commands</span>
+                <span>LLM APIs</span>
             </button>
-            <button class="action-btn" onclick="checkPorts()">
+            <button class="action-btn" id="btn-ports">
                 <span class="icon">🔍</span>
                 <span>Check Ports</span>
             </button>
-            <button class="action-btn" onclick="regexTester()">
+            <button class="action-btn" id="btn-regex">
                 <span class="icon">🔤</span>
                 <span>Regex Testing</span>
             </button>
         </div>
 
+        <div class="sections-toolbar">
+            <input
+                type="search"
+                id="links-search"
+                class="search-input"
+                placeholder="Filter links (e.g. rag, fastapi, qdrant, langchain)..."
+                aria-label="Filter dashboard links"
+            >
+        </div>
+        <div class="search-empty" id="search-empty" hidden>No links matched your query.</div>
+
         <div class="sections">
             <div class="section">
-                <h2>🧠 Problem Solving</h2>
+                <h2>🧠 RAG Core</h2>
                 <div class="links">
-                    <a href="https://leetcode.com" class="link">
-                        <span class="link-icon">🔢</span>
-                        LeetCode
+                    <a href="https://python.langchain.com/docs/introduction/" class="link">
+                        <span class="link-icon">🦜</span>
+                        LangChain Docs
                     </a>
-                    <a href="https://algo.monster" class="link">
-                        <span class="link-icon">👾</span>
-                        AlgoMonster
+                    <a href="https://docs.llamaindex.ai/en/stable/" class="link">
+                        <span class="link-icon">🦙</span>
+                        LlamaIndex Docs
                     </a>
-                    <a href="https://claude.ai" class="link">
-                        <span class="link-icon">🤖</span>
-                        Claude AI
+                    <a href="https://qdrant.tech/documentation/" class="link">
+                        <span class="link-icon">📍</span>
+                        Qdrant Docs
                     </a>
-                    <a href="https://docs.anthropic.com" class="link">
-                        <span class="link-icon">📖</span>
-                        Claude API Docs
+                    <a href="https://docs.trychroma.com/docs/overview/introduction" class="link">
+                        <span class="link-icon">🟣</span>
+                        Chroma Docs
                     </a>
-                    <a href="https://github.com/FrostWillmott?tab=repositories" class="link">
-                        <span class="link-icon">📁</span>
-                        My Algorithms
+                    <a href="https://dspy.ai/" class="link">
+                        <span class="link-icon">🧩</span>
+                        DSPy
                     </a>
                 </div>
             </div>
@@ -409,13 +414,13 @@
             <div class="section">
                 <h2>🔧 Development</h2>
                 <div class="links">
-                    <a href="https://github.com/FrostWillmott" class="link">
-                        <span class="link-icon">🐙</span>
-                        GitHub Profile
-                    </a>
                     <a href="https://github.com" class="link">
                         <span class="link-icon">📦</span>
                         GitHub
+                    </a>
+                    <a href="https://docs.python.org/3/" class="link">
+                        <span class="link-icon">📘</span>
+                        Python Docs
                     </a>
                     <a href="https://pypi.org" class="link">
                         <span class="link-icon">🐍</span>
@@ -433,45 +438,49 @@
             </div>
 
             <div class="section">
-                <h2>🧪 Testing</h2>
+                <h2>🧪 LLM Eval & Observability</h2>
                 <div class="links">
-                    <a href="https://docs.pytest.org" class="link">
-                        <span class="link-icon">🔬</span>
-                        pytest Docs
+                    <a href="https://docs.langchain.com/langsmith/" class="link">
+                        <span class="link-icon">📈</span>
+                        LangSmith Docs
                     </a>
-                    <a href="https://realpython.com/python-testing/" class="link">
-                        <span class="link-icon">📖</span>
-                        Python Testing 101
+                    <a href="https://docs.ragas.io/en/stable/" class="link">
+                        <span class="link-icon">🧪</span>
+                        Ragas Docs
                     </a>
-                    <a href="https://fastapi.tiangolo.com/tutorial/testing/" class="link">
-                        <span class="link-icon">⚡</span>
-                        FastAPI Testing
+                    <a href="https://www.promptfoo.dev/docs/intro/" class="link">
+                        <span class="link-icon">🧾</span>
+                        promptfoo Docs
+                    </a>
+                    <a href="https://docs.arize.com/phoenix" class="link">
+                        <span class="link-icon">🔥</span>
+                        Arize Phoenix
                     </a>
                 </div>
             </div>
 
             <div class="section">
-                <h2>🐛 Debugging</h2>
+                <h2>🤖 LLM APIs & Prompting</h2>
                 <div class="links">
-                    <a href="https://www.jetbrains.com/help/pycharm/debugging-code.html" class="link">
-                        <span class="link-icon">🔍</span>
-                        PyCharm Debugging
+                    <a href="https://platform.openai.com/docs" class="link">
+                        <span class="link-icon">🟢</span>
+                        OpenAI API Docs
                     </a>
-                    <a href="https://www.pragmaticlinux.com/2020/09/setup-and-debug-a-django-app-in-pycharm-community-edition/" class="link">
-                        <span class="link-icon">🐍</span>
-                        Django + PyCharm
+                    <a href="https://docs.anthropic.com/en/docs/overview" class="link">
+                        <span class="link-icon">🟠</span>
+                        Anthropic API Docs
                     </a>
-                    <a href="https://testdriven.io/blog/django-debugging-pycharm/" class="link">
-                        <span class="link-icon">🐳</span>
-                        Django Docker Debug
+                    <a href="https://ai.google.dev/gemini-api/docs" class="link">
+                        <span class="link-icon">🔵</span>
+                        Gemini API Docs
                     </a>
-                    <a href="https://medium.com/@mzhaaf/how-to-run-and-debug-fastapi-with-uvicorn-in-pycharm-2b83ff883f18" class="link">
-                        <span class="link-icon">⚡</span>
-                        FastAPI + PyCharm
+                    <a href="https://docs.pydantic.dev/latest/concepts/models/" class="link">
+                        <span class="link-icon">📐</span>
+                        Structured Output (Pydantic)
                     </a>
-                    <a href="https://www.codementor.io/@laleetavaiya/debug-flask-app-in-docker-with-pycharm-1m1qcguubj" class="link">
-                        <span class="link-icon">🐳</span>
-                        FastAPI Docker Debug
+                    <a href="https://platform.openai.com/docs/guides/function-calling" class="link">
+                        <span class="link-icon">🛠️</span>
+                        Tool/Function Calling
                     </a>
                 </div>
             </div>
@@ -479,6 +488,10 @@
             <div class="section">
                 <h2>🗄️ Database & Tools</h2>
                 <div class="links">
+                    <a href="https://alembic.sqlalchemy.org/en/latest/" class="link">
+                        <span class="link-icon">🧬</span>
+                        Alembic Docs
+                    </a>
                     <a href="https://www.postgresql.org/docs/" class="link">
                         <span class="link-icon">🐘</span>
                         PostgreSQL Docs
@@ -509,47 +522,51 @@
                         <span class="link-icon">🔤</span>
                         Regex101
                     </a>
-                    <a href="https://www.json.org" class="link">
-                        <span class="link-icon">📋</span>
-                        JSON.org
+                    <a href="https://jqlang.github.io/jq/manual/" class="link">
+                        <span class="link-icon">🧾</span>
+                        jq Manual
                     </a>
                     <a href="https://jsonlint.com" class="link">
                         <span class="link-icon">✅</span>
                         JSONLint
                     </a>
+                    <a href="https://learning.postman.com/docs/getting-started/overview/" class="link">
+                        <span class="link-icon">📮</span>
+                        Postman Docs
+                    </a>
                     <a href="https://httpie.io/docs" class="link">
                         <span class="link-icon">🚀</span>
                         HTTPie Docs
-                    </a>
-                    <a href="https://jwt.io" class="link">
-                        <span class="link-icon">🔐</span>
-                        JWT.io
                     </a>
                 </div>
             </div>
 
             <div class="section">
-                <h2>🎨 Frontend Tools</h2>
+                <h2>🐍 Backend Frameworks</h2>
                 <div class="links">
-                    <a href="https://figma.com" class="link">
-                        <span class="link-icon">🎨</span>
-                        Figma
+                    <a href="https://docs.djangoproject.com/" class="link">
+                        <span class="link-icon">🌐</span>
+                        Django Docs
                     </a>
-                    <a href="https://fonts.google.com" class="link">
-                        <span class="link-icon">🔤</span>
-                        Google Fonts
+                    <a href="https://fastapi.tiangolo.com/" class="link">
+                        <span class="link-icon">⚡</span>
+                        FastAPI Docs
                     </a>
-                    <a href="https://coolors.co" class="link">
-                        <span class="link-icon">🌈</span>
-                        Coolors
+                    <a href="https://www.django-rest-framework.org/" class="link">
+                        <span class="link-icon">🔌</span>
+                        Django REST Framework
                     </a>
-                    <a href="https://tailwindcss.com/docs" class="link">
-                        <span class="link-icon">🎭</span>
-                        Tailwind CSS
+                    <a href="https://docs.pydantic.dev/" class="link">
+                        <span class="link-icon">🧩</span>
+                        Pydantic Docs
                     </a>
-                    <a href="https://getbootstrap.com/docs" class="link">
-                        <span class="link-icon">📱</span>
-                        Bootstrap
+                    <a href="https://docs.sqlalchemy.org/" class="link">
+                        <span class="link-icon">🛢️</span>
+                        SQLAlchemy Docs
+                    </a>
+                    <a href="https://docs.celeryq.dev/en/stable/" class="link">
+                        <span class="link-icon">🌿</span>
+                        Celery Docs
                     </a>
                 </div>
             </div>
@@ -587,50 +604,64 @@
                 <span>Quick Commands</span>
             </div>
             <div class="terminal-content" id="terminal-output">
-                <div class="comment"># Django Development Commands</div>
+                <div class="comment"># FastAPI + Django Quickstart</div>
+                <div class="command">uvicorn app.main:app --reload</div>
                 <div class="command">python manage.py runserver</div>
                 <div class="command">python manage.py shell</div>
-                <div class="command">python manage.py migrate</div>
                 <br>
-                <div class="comment"># macOS Port Checking</div>
+                <div class="comment"># RAG Stack Setup</div>
+                <div class="command">pip install langchain langchain-openai qdrant-client</div>
+                <div class="command">pip install llama-index chromadb sentence-transformers</div>
+                <br>
+                <div class="comment"># LLM API Smoke Test</div>
+                <div class="command">python -c "from openai import OpenAI; print('ok')"</div>
+                <div class="command">python -c "import anthropic; print('ok')"</div>
+                <br>
+                <div class="comment"># Evaluation</div>
+                <div class="command">pip install ragas promptfoo</div>
+                <div class="command">promptfoo eval</div>
+                <br>
+                <div class="comment"># Infra Utilities</div>
+                <div class="command">docker compose up -d</div>
+                <div class="command">kubectl get pods -A</div>
                 <div class="command">lsof -i :8000</div>
-                <div class="command">ps aux | grep postgres</div>
-                <br>
-                <div class="comment"># Kubernetes Commands</div>
-                <div class="command">kubectl get pods</div>
-                <div class="command">kubectl get services</div>
-                <div class="command">kubectl logs -f pod-name</div>
-                <br>
-                <div class="comment"># GCP Commands</div>
-                <div class="command">gcloud config list</div>
-                <div class="command">gcloud compute instances list</div>
-                <div class="command">gcloud container clusters get-credentials cluster-name</div>
-                <br>
-                <div class="comment"># Poetry Commands</div>
-                <div class="command">poetry install</div>
-                <div class="command">poetry add package-name</div>
-                <div class="command">poetry shell</div>
             </div>
         </div>
     </div>
 
     <script>
+        const DASHBOARD_TIMEZONE = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+
+        function showTerminalAndCopy(content, clipboardText) {
+            if (!clipboardText) {
+                updateTerminal(content);
+                return;
+            }
+
+            navigator.clipboard.writeText(clipboardText).then(() => {
+                updateTerminal(`${content}\n\n✅ "${clipboardText}" copied to clipboard!`);
+            }).catch(() => {
+                updateTerminal(content);
+            });
+        }
+
         function updateTime() {
             const now = new Date();
-            const moscowTime = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Moscow"}));
-            const timeString = moscowTime.toLocaleTimeString('en-US', { 
-                hour12: false, 
-                hour: '2-digit', 
+            const timeString = now.toLocaleTimeString('en-US', {
+                timeZone: DASHBOARD_TIMEZONE,
+                hour12: false,
+                hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit'
             });
-            const dateString = moscowTime.toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+            const dateString = now.toLocaleDateString('en-US', {
+                timeZone: DASHBOARD_TIMEZONE,
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
             });
-            document.getElementById('current-time').textContent = `${timeString} • ${dateString}`;
+            document.getElementById('current-time').textContent = `${timeString} • ${dateString} (${DASHBOARD_TIMEZONE})`;
         }
 
         function runDjangoShell() {
@@ -657,11 +688,7 @@
    exit()  # or Ctrl+D in terminal
    # In PyCharm: just close the console tab`;
             
-            navigator.clipboard.writeText('python manage.py shell').then(() => {
-                updateTerminal(commands + '\n\n✅ "python manage.py shell" copied to clipboard!');
-            }).catch(() => {
-                updateTerminal(commands);
-            });
+            showTerminalAndCopy(commands, 'python manage.py shell');
         }
 
         function checkPorts() {
@@ -692,11 +719,7 @@
 💡 macOS specific:
    sudo lsof -i -P -n | grep LISTEN  # More detailed info`;
             
-            navigator.clipboard.writeText('lsof -i :8000').then(() => {
-                updateTerminal(commands + '\n\n✅ "lsof -i :8000" copied to clipboard!');
-            }).catch(() => {
-                updateTerminal(commands);
-            });
+            showTerminalAndCopy(commands, 'lsof -i :8000');
         }
 
         function regexTester() {
@@ -734,11 +757,7 @@
    • Code generator for different languages
    • Save & share patterns`;
             
-            navigator.clipboard.writeText('import re').then(() => {
-                updateTerminal(commands + '\n\n✅ "import re" copied to clipboard!');
-            }).catch(() => {
-                updateTerminal(commands);
-            });
+            showTerminalAndCopy(commands, 'import re');
         }
 
         function k8sCommands() {
@@ -777,90 +796,111 @@
    kubectl top pods
    kubectl get events --sort-by=.metadata.creationTimestamp`;
             
-            navigator.clipboard.writeText('kubectl get pods').then(() => {
-                updateTerminal(commands + '\n\n✅ "kubectl get pods" copied to clipboard!');
-            }).catch(() => {
-                updateTerminal(commands);
-            });
+            showTerminalAndCopy(commands, 'kubectl get pods');
         }
 
         function algorithmsTracker() {
-            const progress = `Algorithm Practice Progress:
+            const progress = `RAG Workflow Starter:
 
-🎯 Flexible Learning Approach:
-   • Use LeetCode's built-in progress tracking
-   • AlgoMonster paid subscription for patterns
-   • Claude AI for detailed explanations when stuck
+1) Ingestion:
+   • Load docs (PDFs, wiki, Notion export, markdown)
+   • Normalize and clean text
 
-📊 Current Focus Areas:
-   ✅ Arrays & Strings
-   🔄 Two Pointers & Sliding Window  
-   📝 Hash Tables & Sets
-   🌳 Trees & Graphs
-   📚 Dynamic Programming (upcoming)
+2) Chunking:
+   • Start with 500-1000 chars
+   • Add overlap 50-150 chars
 
-💡 Problem-Solving Strategy:
-   1. Read problem carefully (understand examples)
-   2. Think through brute force approach
-   3. Identify patterns from AlgoMonster
-   4. Optimize using known patterns
-   5. Code and test with examples
-   6. Ask Claude for explanation if stuck
+3) Embeddings + Vector DB:
+   • Choose model + store (Qdrant/Chroma)
+   • Track metadata (source, section, timestamp)
 
-🔗 Quick Access:
-   • LeetCode: Check daily challenge + recent submissions
-   • AlgoMonster: Review pattern you're currently studying
-   • Claude: Paste problem for step-by-step breakdown
+4) Retrieval:
+   • Top-k search + metadata filters
+   • Add reranker if recall is noisy
 
-📈 No rigid schedule - just consistent practice when possible`;
-            
-            updateTerminal(progress);
+5) Generation:
+   • Use strict system prompt + citations
+   • Keep answer grounded in retrieved context
+
+6) Evaluation:
+   • Build golden set
+   • Measure faithfulness and answer relevance (Ragas)
+
+Quick start package set:
+   pip install langchain langchain-openai qdrant-client ragas`;
+
+            showTerminalAndCopy(progress, 'pip install langchain langchain-openai qdrant-client ragas');
         }
 
         function gcpCommands() {
-            const commands = `Google Cloud Platform - Future Learning Plan:
+            const commands = `LLM API Integration Cheatsheet:
 
-📚 Study Resources (when ready):
-   • Official GCP Documentation
-   • Qwiklabs hands-on labs
-   • Google Cloud Skills Boost
-   • YouTube: Google Cloud Tech channel
+🔑 Environment setup:
+   export OPENAI_API_KEY="..."
+   export ANTHROPIC_API_KEY="..."
+   export GOOGLE_API_KEY="..."
 
-🎓 Certification Path Options:
-   • Cloud Digital Leader (foundational)
-   • Associate Cloud Engineer (technical)
-   • Professional Cloud Architect (advanced)
+🐍 Python clients:
+   pip install openai anthropic google-generativeai
 
-🛠️ Key Areas to Focus On:
-   • Compute Engine & App Engine
-   • Google Kubernetes Engine (GKE)
-   • Cloud Storage & Cloud SQL
-   • IAM & Security
-   • Networking fundamentals
+🧱 Recommended request pattern:
+   • timeout + retries with exponential backoff
+   • idempotency key for critical operations
+   • structured output via Pydantic schema
+   • prompt + response logging with PII masking
 
-💡 Learning Strategy:
-   1. Start with free tier experimentation
-   2. Complete Qwiklabs for hands-on practice
-   3. Build sample projects (deploy Django app)
-   4. Take practice exams
-   5. Schedule certification when confident
+⚙️ Production controls:
+   • rate limits per provider
+   • fallback model/provider
+   • caching for repeated prompts
+   • cost and token usage monitoring
 
-🔗 Preparation Commands (for later):
-   gcloud config list
-   gcloud auth login
-   gcloud projects list
-   gcloud compute instances list
+🧪 Smoke check:
+   python -c "from openai import OpenAI; print('OpenAI client ready')"`;
 
-📝 Current Status: Planning phase - focus on K8s + algorithms first`;
-            
-            updateTerminal(commands);
+            showTerminalAndCopy(commands, 'pip install openai anthropic google-generativeai');
+        }
+
+        function filterLinks(query) {
+            const normalizedQuery = query.trim().toLowerCase();
+            const sections = document.querySelectorAll('.section');
+            let visibleLinkCount = 0;
+
+            sections.forEach((section) => {
+                const links = section.querySelectorAll('.link');
+                let hasVisibleLinks = false;
+
+                links.forEach((link) => {
+                    const isMatch = link.textContent.toLowerCase().includes(normalizedQuery);
+                    link.style.display = isMatch ? '' : 'none';
+
+                    if (isMatch) {
+                        hasVisibleLinks = true;
+                        visibleLinkCount += 1;
+                    }
+                });
+
+                section.style.display = hasVisibleLinks ? '' : 'none';
+            });
+
+            document.getElementById('search-empty').hidden = normalizedQuery === '' || visibleLinkCount > 0;
         }
 
         function updateTerminal(content) {
-            document.getElementById('terminal-output').innerHTML = `<div style="white-space: pre-line; color: #7ee787;">${content}</div>`;
+            const terminalOutput = document.getElementById('terminal-output');
+            terminalOutput.textContent = content;
+            terminalOutput.style.whiteSpace = 'pre-line';
+            terminalOutput.style.color = '#7ee787';
         }
 
         // Initialize
+        document.getElementById('btn-django-shell').addEventListener('click', runDjangoShell);
+        document.getElementById('btn-k8s').addEventListener('click', k8sCommands);
+        document.getElementById('btn-algorithms').addEventListener('click', algorithmsTracker);
+        document.getElementById('btn-gcp').addEventListener('click', gcpCommands);
+        document.getElementById('btn-ports').addEventListener('click', checkPorts);
+        document.getElementById('btn-regex').addEventListener('click', regexTester);
+        document.getElementById('links-search').addEventListener('input', (event) => filterLinks(event.target.value));
         updateTime();
         setInterval(updateTime, 1000);
     </script>
